@@ -28,9 +28,32 @@
 			<view v-show="currentIndex === 0">
 				<h2>直播</h2>
 			</view>
-
-			<view v-show="currentIndex === 1">
-				<h2>推荐</h2>
+			<view v-show="currentIndex === 1" style="background-color: #F5F2F0;">
+				<swiper class="swiper" :autoplay="true" :interval="2000" :duration="500" :circular="true"
+					indicator-dots="true" indicator-active-color="red" indicator-color="white">
+					<swiper-item>
+						<image class="img-swiper" src="../../static/image/index/Snipaste_2021-04-19_14-18-57.jpg">
+						</image>
+					</swiper-item>
+					<swiper-item>
+						<image class="img-swiper" src="../../static/image/index/Snipaste_2021-04-19_14-17-00.jpg">
+						</image>
+					</swiper-item>
+					<swiper-item>
+						<image class="img-swiper" src="../../static/image/index/Snipaste_2021-04-19_14-18-11.jpg">
+						</image>
+					</swiper-item>
+				</swiper>
+				<view class="top2">
+					<view class="card2" v-for="(item,index) in items" :key="index">
+						<view style="width: 100%;height: 60%;" @click="play(item.short_link)">
+							<image :src=item.pic class="card2-img">
+						</view>
+						<view>
+							{{item.index}}
+						</view>
+					</view>
+				</view>
 			</view>
 
 			<view v-show="currentIndex === 2">
@@ -118,16 +141,6 @@
 
 			}
 		},
-
-		// onLoad() {
-		// 	uni.request({
-		// 		url: 'https://api.bilibili.com/x/web-interface/popular?ps=20&pn=1',
-		// 		success: (res) => {
-		// 			console.log(res);
-		// 		}
-		// 	});
-		// },
-
 		onLoad() {
 			uni.request({
 				url: 'https://api.bilibili.com/x/web-interface/popular?ps=20&pn=1',
@@ -240,13 +253,22 @@
 	}
 
 	.top {
-
 		display: flex;
 		flex-direction: row;
 		width: 100%;
 		align-items: center;
 		margin-top: 20rpx;
-
+	}
+	.top2 {
+		background-color: #F5F2F0;
+		height: 100%;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		width: 100%;
+		align-items: center;
+		margin-top: 20rpx;
+	    border-radius: 5px;
 	}
 
 	.img {
@@ -256,6 +278,7 @@
 	}
 
 	.card {
+
 		margin-top: 30rpx;
 		display: flex;
 		flex-direction: row;
@@ -265,12 +288,32 @@
 		border-bottom: 1px solid #d1d1d1;
 	}
 
+	.card2 {
+		background-color: #FFFFFF;
+		margin-left:3%;
+		margin-bottom: 20rpx;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 45.5%;
+		height: 400rpx;
+		border-radius: 5px;
+	}
+
 	.card-img {
 		margin-left: 20rpx;
 		margin-right: 30rpx;
 		width: 95%;
 		height: 90%;
 		border-radius: 5px;
+	}
+
+	.card2-img {
+		border-radius: 5px 5px 0 0 ;
+		margin-bottom: 30rpx;
+		width: 100%;
+		height: 100%;
+
 	}
 
 	.card-text {
@@ -307,5 +350,21 @@
 		font-size: 26rpx;
 		color: #FF502E;
 		margin-bottom: 20rpx;
+	}
+
+	.swiper {
+		margin-left: 15rpx;
+		border-radius: 10rpx;
+		margin-top: 40rpx;
+		height: 300rpx;
+		width: 95%;
+
+	}
+
+	.img-swiper {
+		width: 100%;
+		height: 300rpx;
+		align-items: center;
+		border-radius: 10rpx
 	}
 </style>

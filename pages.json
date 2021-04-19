@@ -22,16 +22,16 @@
             "path" : "pages/dynamic/dynamic",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-        "app-plus": {
-          "titleNView": {
-            "buttons":[{
-              "float":"right",
-                 "text":"\ue64d",
-              "fontSrc": "/static/iconfont.ttf"
-            }]
-          }
-        }
+                "navigationStyle":"custom"
+        // "app-plus": {
+        //   "titleNView": {
+        //     "buttons":[{
+        //       "float":"right",
+        //          "text":"\ue64d",
+        //       "fontSrc": "/static/iconfont.ttf"
+        //     }]
+        //   }
+        // }
             }
             
         }
@@ -39,8 +39,7 @@
             "path" : "pages/vip/vip",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "navigationStyle":"custom"
             }
             
         }

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<!-- 导航栏 -->
-		<uni-nav-bar>
+		<uni-nav-bar fixed="false">
 			<view slot="left" class="left-item">
 				会员购
 			</view>
@@ -9,12 +9,17 @@
 				官方直营·正品保证
 			</view>
 			<view slot="right">
-				<i class="iconfont icon-youxi right-icon" style="margin-left:-40px;"></i>
-				<i class="iconfont icon-xinfeng right-icon" style="margin-left:10px;font-weight:bold;"></i>
+				<i class="iconfont icon-zhuangxiang right-icon" style="margin-left:-60px;"></i>
+				<i class="iconfont icon-gouwuche right-icon" style="margin-left:10px;font-weight:bold;"></i>
+				<i class="iconfont icon-geren right-icon" style="margin-left:10px;font-weight:bold;"></i>
 			</view>
 		</uni-nav-bar>
 		<!-- 搜索框 -->
-		
+		<view class="input" @click="gotoSearch">
+			<text class="iconfont icon-wddl" style="color: #d1d1d1; margin-left: 40%;" />
+			<text style="color: #d1d1d1; margin-left: 3%;">魔力赏</text>
+			<text class="iconfont icon-paizhao" style="color: #d1d1d1; margin-left: 30%;" />
+		</view>
 		<!-- 展示图片 -->
 		<view class="image-view1">
 			<view>
@@ -70,7 +75,7 @@
 				</image>
 			</view>
 		</view>
-		<view class="card">
+		<view class="swiper-box">
 			<!-- 轮播图 -->
 			<swiper  class="swiper" :autoplay="true" :interval="2000" 
 					:duration="500" :circular="true" indicator-dots="true"
@@ -94,7 +99,7 @@
 					<image class="img-swiper" src="../../static/swiper-photos/06.jpg"></image>
 				</swiper-item>
 			</swiper>
-			<!-- box -->
+			<!-- right-box box -->
 			<view class="right-box">
 				<view style="font-size: 32rpx; font-weight: 600; margin: 12rpx;">魔力赏</view>
 				<view style="color: #8A6DE9; margin-top: -50rpx; margin-left: 120rpx;">
@@ -104,20 +109,44 @@
 				<image src="../../static/card/08.png" style="width: 100rpx; height: 160rpx; margin-left: 40rpx;"></image>
 			</view>
 		</view>
-		<!-- </view> -->
-		<!-- 今日上新 -->
-		<!-- 卡片 -->
-		<view v-for="(vip,index) in Vips" :key="index">
-			<uni-card title="" :thumbnail="vip.cover" mode="style">
-				<template v-slot="footer">
-					<view class="footer-box">
-						<view style="font-size: 32rpx; font-weight: 600;">{{vip.project_name}}</view>
-						<view style="color: #FF4A6A;">{{vip.sale_flag}}</view>
-						<view style="color: #FF4A6A; margin-top: 10rpx; font-weight: 600;">￥{{vip.price_high}}</view>
-					</view>
-				</template>
-			</uni-card>
+		<!-- button -->
+		<view class="button-item">
+			<button size="mini" @click="gotoTodayNews">今日上新
+				<i class="iconfont icon-shandian"></i>
+			</button>
+			<button size="mini" @click="gotoFirstLook">抢先看
+				<i class="iconfont icon-mulu"></i>
+			</button>
+			<button size="mini" @click="gotoRankingList">排行榜
+				<i class="iconfont icon-paihangbang"></i>
+			</button>
+			<button size="mini" @click="gotoIpParadise">IP乐园
+				<i class="iconfont icon-icon-test"></i>
+			</button>
 		</view>
+		<!-- 卡片 -->
+		<!-- 瀑布流布局列表 -->
+		<view class="Index">
+			<!-- 瀑布流布局列表 -->
+			<view class="pubuBox">
+				<view class="pubuItem">
+					<view class="item-masonry" v-for="(vip, index) in Vips" :key="index">
+						<image :src="vip.cover" mode="widthFix"></image>
+						<view class="listtitle"> <!-- 这是没有高度的父盒子（下半部分） -->
+							<view class="list-name">{{ vip.project_name }}</view>
+							<view class="list-flag">
+								{{vip.sale_flag}}
+							</view>
+							<view class="list-price">
+								￥{{ vip.price_high }}
+							</view>
+						</view>
+					</view>
+				</view>
+			</view>
+		</view>
+		<!-- 底线 -->
+		<image src="../../static/card/loading.png" style="margin-top: -80%; margin-left: 5%;"></image>
 	</view>
 </template>
 
@@ -127,57 +156,95 @@
 	import uniList from '../../components/uni-ui/uni-list/uni-list.vue'
 	import uniListItem from '../../components/uni-ui/uni-list-item/uni-list-item.vue'
 	export default {
-	    components: {uniNavBar, uniCard, uniList, uniListItem},
+	    components: {
+			uniNavBar, 
+			uniCard, 
+			uniList, 
+			uniListItem,
+			
+		},
 		data() {
 			return {
 				keyword: '',
 				Vips: [],
 			};
 		},
+		onShow() {},
 		onLoad() {
 			uni.request({
-				url:'https://show.bilibili.com/api/ticket/project/listV3?version=133&page=1&pagesize=20&platform=web&area=-1&p_type=全部类型&style=1&buvid=9E1A8BC2-CC7E-45EA-9C9B-BCCCCAE10112184999infoc&mid=480185780',
+				url:'https://show.bilibili.com/api/ticket/project/listV3?version=133&page=1&pagesize=20&platform=web&area=-1&p_type=全部类型&style=1&buvid=9E1A8BC2-CC7E-45EA-9C9B-BCCCCAE10112184999infoc&mid=480185780' + this.page,
 				success: (res) => {
-				// console.log(res);
-				this.Vips = res.data.data.result;
-				for (let i = 0; i < this.Vips.length; i++) {
-					this.Vips[i].cover = 'https:'+this.Vips[i].cover
-					// console.log(this.Vips[i].cover);
-				}
-				
+					// console.log(res);
+					this.Vips = res.data.data.result;
+					for (let i = 0; i < this.Vips.length; i++) {
+						this.Vips[i].cover = 'https:'+this.Vips[i].cover
+						// console.log(this.Vips[i].cover);
+					}
 				}
 			});
-
 		},
-			methods: {
-				
-			}
-		}
+		methods: {
+			gotoSearch() {
+				console.log("进入搜索页面")
+				uni.navigateTo({
+					url: '../search/search',
+					success() {
+						console.log("#####################")
+					},
+					fail(err) {
+						console.log(err)
+						console.log("错误****************************")
+					}
+				});
+			},
+			gotoTodayNews() {
+				uni.navigateTo({
+				    url:'./today-news.vue',
+				})
+			},
+			gotoFirstLook() {
+				uni.navigateTo({
+				    url:'./first-look.vue',
+				})
+			},
+			gotoRankingList() {
+				uni.navigateTo({
+				    url:'./ranking-list.vue',
+				})
+			},
+			gotoIpParadise() {
+				uni.navigateTo({
+				    url:'./ip-paradise.vue',
+				})
+			},
+		},
+		
+	}
 </script>
 
-<style>
+<style  scoped="scoped">
 .left-item {
-	font-size: 40rpx;
+	font-size: 38rpx;
 	font-weight: 600;
+	margin-left: 5%;
 }
 .title-item {
-	color: #6D6D72;
-	font-size: 28rpx;
+	color: #BDBDBD;
+	font-size: 30rpx;
+	margin-top: 1%;
 }
-.icon-item1 {
-	margin-left: 20%;
-	font-size:46rpx;
-	color: #555555;
+.right-icon {
+	font-size: 38rpx;
+	color: #BDBDBD;
 }
-.icon-item2 {
-	margin-left: 10%;
-	font-size:46rpx;
-	color: #555555;
-}
-.icon-item3 {
-	margin-right: 0rpx;
-	font-size:46rpx;
-	color: #555555;
+.input {
+	margin-top: 15%;
+	height: 30px;
+	margin-bottom: 10px;
+	margin-left: 5%;
+	width: 90%;
+	border-radius:30px;
+	background-color: #f6f6f6;
 }
 .image-view1 {
 	display: flex;
@@ -204,6 +271,10 @@
 	display: flex;
 	flex-direction: column;
 }
+.swiper-box{
+	 border-radius:30rpx;
+	 display: flex;
+}
 .swiper {
 	margin-left: 15rpx;
 	margin-top: 40rpx;
@@ -223,24 +294,74 @@
 	background-image: linear-gradient(Lavender,white);
 	border-radius:40rpx
 }
-.card {
-	 border-radius:30rpx;
-	 display: flex;
+.button-item {
+	margin-top: 5%;
+	display: flex;
+	flex-wrap: wrap;
 }
-.card1 {
-	 height: 400rpx;
-	 width: 750rpx;
-	 border-radius:30rpx;
-	 display: flex;
-	 align-items: flex-start;
+/deep/button{
+	font-size: 12px !important;
 }
-.card2 {
-	 margin-top: 30%;
-	 height: 400rpx;
-	 width: 750rpx;
-	 border-radius:30rpx;
-	 display: flex;
-	 justify-content: space-around;
-	 align-items: flex-start;
+/* 去掉uniapp中button自带的边框 */
+/deep/button::after {
+	border: none
+}
+.icon-shandian {
+	color: #FFEE58;
+}
+.icon-mulu {
+	color: #81D4FA;
+}
+.icon-paihangbang {
+	color: #FF80AB;
+}
+.icon-icon-test {
+	color: #9CCC65;
+}
+page {
+	background-color: #FFFFFF;
+	height: 100%;
+}
+.pubuBox {
+	padding: 20rpx;
+}
+.pubuItem {
+	column-count: 2;
+	column-gap: 20rpx;
+}
+.item-masonry {
+	box-sizing: border-box;
+	border-radius: 15rpx;
+	overflow: hidden;
+	background-color: #fff;
+	break-inside: avoid;
+	/*避免在元素内部插入分页符*/
+	box-sizing: border-box;
+	margin-bottom: 15rpx;
+	box-shadow: 0px 0px 28rpx 1rpx rgba(213, 213, 213, 0.1);
+}
+.item-masonry image {
+	width: 100%;
+}
+.listtitle {
+	padding-left: 22rpx;
+	font-size: 24rpx;
+	/* padding-bottom: 22rpx; */
+}
+.list-name {
+	font-size: 30rpx;
+}
+.list-flag {
+	color: #FF80AB;
+	font-size: 24rpx;
+	font-weight: bold;
+}
+.list-price {
+	font-size: 28rpx;
+	color: #FF80AB;
+}
+.Index {
+	width: 100%;
+	height: 100%;
 }
 </style>
