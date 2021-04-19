@@ -35,8 +35,7 @@
             "path" : "pages/vip/vip",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+               "navigationStyle":"custom"
             }
             
         }
@@ -44,8 +43,7 @@
             "path" : "pages/my/my",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "navigationStyle":"custom"
             }
             
         }
@@ -68,8 +66,7 @@
             "path" : "pages/zoom/zoom",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "navigationStyle":"custom"
             }
             
         }
@@ -107,6 +104,15 @@
             }
             
         }
+		 ,{
+		            "path" : "pages/myrec/myrec",
+		            "style" :                                                                                    
+		            {
+		                "navigationBarTitleText": "",
+		                "enablePullDownRefresh": false
+		            }
+		            
+		        }
         ,{
             "path" : "pages/my/download/download",
             "style" :                                                                                    
